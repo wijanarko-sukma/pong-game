@@ -29,12 +29,18 @@ void MainUILayer::constructMenu()
   std::string fontName = "fonts/Marker Felt.ttf";
   int fontSize = 44;
 
+  cocos2d::ui::Text * title = cocos2d::ui::Text::create("Pong Game", fontName, fontSize + 24);
+  title->setTextColor(cocos2d::Color4B(0, 0, 0, 255));
+  title->enableOutline(cocos2d::Color4B(255, 255, 255, 255), 4);
+  title->setPosition(cocos2d::Vec2(visibleOrigin.x + visibleSize.width / 2, visibleOrigin.y + visibleSize.height * 0.75));
+  this->addChild(title);
+
   cocos2d::ui::Button * greenButton = cocos2d::ui::Button::create("button_green.png");
   greenButton->setScale9Enabled(true);
   greenButton->setTouchEnabled(true);
   greenButton->setContentSize(buttonSize);
   greenButton->addTouchEventListener(CC_CALLBACK_2(MainUILayer::listenGreenButtonTouch, this));
-  greenButton->setPosition(cocos2d::Vec2(visibleOrigin.x + visibleSize.width / 2, visibleOrigin.y + visibleSize.height / 2 + buttonSize.height / 2 + 20));
+  greenButton->setPosition(cocos2d::Vec2(visibleOrigin.x + visibleSize.width / 2, visibleOrigin.y + visibleSize.height / 2 + buttonSize.height / 2 - 20));
   this->addChild(greenButton);
 
   cocos2d::ui::Text * startText = cocos2d::ui::Text::create("Start", fontName, fontSize);
@@ -48,7 +54,7 @@ void MainUILayer::constructMenu()
   redButton->setTouchEnabled(true);
   redButton->setContentSize(buttonSize);
   redButton->addTouchEventListener(CC_CALLBACK_2(MainUILayer::listenRedButtonTouch, this));
-  redButton->setPosition(cocos2d::Vec2(visibleOrigin.x + visibleSize.width / 2, visibleOrigin.y + visibleSize.height / 2 - buttonSize.height / 2 - 20));
+  redButton->setPosition(cocos2d::Vec2(visibleOrigin.x + visibleSize.width / 2, visibleOrigin.y + visibleSize.height / 2 - buttonSize.height / 2 - 40));
   this->addChild(redButton);
 
   cocos2d::ui::Text * exitText = cocos2d::ui::Text::create("Exit", fontName, fontSize);
