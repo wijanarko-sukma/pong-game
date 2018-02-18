@@ -1,0 +1,123 @@
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Compiled Dynamic libraries
+#*.so
+#*.dylib
+#*.dll
+
+# Compiled Static libraries
+*.lai
+*.la
+#*.a
+#*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# DS Store
+.DS_Store
+
+### Xcode ###
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+#xcode state
+*.perspectivev3
+!default.perspectivev3
+*.xcworkspace
+!default.xcworkspace
+xcuserdata
+profile
+*.moved-aside
+
+### Eclipse ###
+*.pydevproject
+.metadata
+.gradle
+*bin/
+*tmp/
+*assets/
+!*.xcassets/
+*obj/
+libs/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+
+# External tool builders
+.externalToolBuilders/
+
+# Locally stored "Eclipse launch configurations"
+*.launch
+
+# CDT-specific
+.cproject
+
+# PDT-specific
+.buildpath
+
+# sbteclipse plugin
+.target
+
+# TeXlipse plugin
+.texlipse
+
+# =============== #
+# Unity generated #
+# =============== #
+Temp/
+Obj/
+UnityGenerated/
+Library/
+
+# ===================================== #
+# Visual Studio / MonoDevelop generated #
+# ===================================== #
+ExportedObj/
+*.svd
+*.userprefs
+*.csproj
+*.pidb
+*.suo
+*.user
+*.unityproj
+*.booproj
+*.sdf
+*.opensdf
+*.user
+Debug.win32
+Release.win32
+
+
+# ============ #
+# OS generated #
+# ============ #
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+
+# Android Studio
+*.idea/
+*.iml
+
+.externalNativeBuild
+
+.vs
