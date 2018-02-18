@@ -3,9 +3,9 @@
 
 #include "cocos2d.h"
 
-class GameplayLayer : public cocos2d::LayerColor
+class GameplayLayer : public cocos2d::Layer
 {
-public:
+CC_CONSTRUCTOR_ACCESS:
   GameplayLayer();
   ~GameplayLayer();
 };

@@ -5,11 +5,12 @@
 
 class GameScene : public cocos2d::Scene
 {
-public:
+CC_CONSTRUCTOR_ACCESS:
   GameScene();
   ~GameScene();
 
-  virtual bool init();
+public:
+  bool init() override;
 
   CREATE_FUNC(GameScene);
 };

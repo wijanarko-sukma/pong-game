@@ -5,11 +5,11 @@
 
 class MainScene : public cocos2d::Scene
 {
-public:
+CC_CONSTRUCTOR_ACCESS:
   MainScene();
   ~MainScene();
 
-  virtual bool init();
+  bool init() override;
 
   CREATE_FUNC(MainScene);
 };

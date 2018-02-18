@@ -6,10 +6,11 @@
 
 class MainUILayer : public cocos2d::LayerColor
 {
-public:
+CC_CONSTRUCTOR_ACCESS:
   MainUILayer();
   ~MainUILayer();
 
+public:
   virtual bool init();
 
   CREATE_FUNC(MainUILayer);

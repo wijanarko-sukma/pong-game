@@ -6,9 +6,11 @@
 
 class GameUILayer : public cocos2d::LayerColor
 {
-public:
+CC_CONSTRUCTOR_ACCESS:
   GameUILayer();
   ~GameUILayer();
+
+public:
 };
 
 #endif
