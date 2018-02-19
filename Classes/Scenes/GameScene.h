@@ -10,9 +10,8 @@ CC_CONSTRUCTOR_ACCESS:
   ~GameScene();
 
 public:
-  bool init() override;
-
-  CREATE_FUNC(GameScene);
+  static GameScene * createWithPhysics();
+  bool initWithPhysics() override;
 };
 
 #endif
