@@ -131,7 +131,7 @@ CC_CONSTRUCTOR_ACCESS:
     virtual ~Scene();
     
     bool init() override;
-    bool initWithSize(const Size& size);
+    virtual bool initWithSize(const Size& size);
     
     void setCameraOrderDirty() { _cameraOrderDirty = true; }
     
@@ -186,7 +186,7 @@ public:
     static Scene *createWithPhysics();
     
 CC_CONSTRUCTOR_ACCESS:
-    bool initWithPhysics();
+    virtual bool initWithPhysics();
     
 protected:
     void addChildToPhysicsWorld(Node* child);
