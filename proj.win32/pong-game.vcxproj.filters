@@ -16,6 +16,9 @@
     <Filter Include="src\Layers">
       <UniqueIdentifier>{1d41b038-7c3d-4483-8e4e-56e93eed7c95}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\GameObjects">
+      <UniqueIdentifier>{06fcb027-246c-4b85-88f9-5ae489016335}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -41,6 +44,15 @@
     </ClCompile>
     <ClCompile Include="..\Classes\Layers\GameplayLayer.cpp">
       <Filter>src\Layers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GameObjects\BallObject.cpp">
+      <Filter>src\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GameObjects\DynamicObject.cpp">
+      <Filter>src\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GameObjects\BarObject.cpp">
+      <Filter>src\GameObjects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -70,6 +82,15 @@
     </ClInclude>
     <ClInclude Include="..\Classes\Layers\MainUILayer.h">
       <Filter>src\Layers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameObjects\BallObject.h">
+      <Filter>src\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameObjects\DynamicObject.h">
+      <Filter>src\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameObjects\BarObject.h">
+      <Filter>src\GameObjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
