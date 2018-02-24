@@ -13,14 +13,14 @@ CC_CONSTRUCTOR_ACCESS:
 public:
   static DynamicObject * create(const std::string & filename);
 
-  double getVelocity() const;
-  virtual void setVelocity(double velocity);
+  double getSpeed() const;
+  virtual void setSpeed(double speed);
   const cocos2d::Vec2 & getDirection() const;
   virtual void setDirection(const cocos2d::Vec2 & direction);
   virtual void setDirection(double x, double y);
 
 protected:
-  double _velocity;
+  double _speed;
   cocos2d::Vec2 _direction;
 };
 

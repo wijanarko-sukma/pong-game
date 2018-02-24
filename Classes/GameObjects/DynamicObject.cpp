@@ -1,7 +1,7 @@
 #include "DynamicObject.h"
 
 DynamicObject::DynamicObject() :
-  _velocity(0.0)
+  _speed(0.0)
   , _direction(cocos2d::Vec2::ZERO)
 {
 }
@@ -24,14 +24,14 @@ DynamicObject * DynamicObject::create(const std::string & filename)
   return nullptr;
 }
 
-double DynamicObject::getVelocity() const
+double DynamicObject::getSpeed() const
 {
-  return _velocity;
+  return _speed;
 }
 
-void DynamicObject::setVelocity(double velocity)
+void DynamicObject::setSpeed(double speed)
 {
-  _velocity = velocity;
+  _speed = speed;
 }
 
 const cocos2d::Vec2 & DynamicObject::getDirection() const
