@@ -32,6 +32,9 @@ double DynamicObject::getSpeed() const
 void DynamicObject::setSpeed(double speed)
 {
   _speed = speed;
+  if (_physicsBody != nullptr) {
+    _physicsBody->setVelocity(cocos2d::Vec2(_direction * _speed));
+  }
 }
 
 const cocos2d::Vec2 & DynamicObject::getDirection() const
@@ -41,11 +44,15 @@ const cocos2d::Vec2 & DynamicObject::getDirection() const
 
 void DynamicObject::setDirection(const cocos2d::Vec2 & direction)
 {
-  _direction = direction;
+  this->setDirection(direction.x, direction.y);
 }
 
 void DynamicObject::setDirection(double x, double y)
 {
   _direction.x = x;
   _direction.y = y;
+
+  if (_physicsBody != nullptr) {
+    _physicsBody->setVelocity(cocos2d::Vec2(_direction * _speed));
+  }
 }

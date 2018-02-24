@@ -36,18 +36,19 @@ bool BarObject::init(const std::string & filename, double width, double height)
 
 void BarObject::setBarDirection(BarDirection direction)
 {
+  float directionY = 0.0;
+
   switch (direction)
   {
-  case None:
-    _direction.y = 0;
-    break;
   case Up:
-    _direction.y = 1;
+    directionY = 1;
     break;
   case Down:
-    _direction.y = -1;
+    directionY = -1;
     break;
   default:
     break;
   }
+
+  this->setDirection(0.0, directionY);
 }
