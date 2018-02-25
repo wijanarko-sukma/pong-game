@@ -3,6 +3,8 @@
 #include "Layers/GameplayLayer.h"
 #include "Layers/GameUILayer.h"
 
+constexpr float GAME_TIMER = 60.0;
+
 GameScene::GameScene()
 {
 }
@@ -32,6 +34,7 @@ bool GameScene::initWithPhysics()
     this->getPhysicsWorld()->setGravity(cocos2d::Vec2::ZERO);
     this->getPhysicsWorld()->setFixedUpdateRate(1 / 60.0);
     std::shared_ptr<GameManager> gameManager = std::make_shared<GameManager>();
+    gameManager->setTimer(GAME_TIMER);
     auto gameplayLayer = GameplayLayer::create(gameManager);
     this->addChild(gameplayLayer);
     return true;
