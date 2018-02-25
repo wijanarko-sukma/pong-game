@@ -25,8 +25,9 @@ enum ObjectTag
   BallTag
 };
 
-GameplayLayer::GameplayLayer() :
-  _leftBar(nullptr)
+GameplayLayer::GameplayLayer(std::shared_ptr<GameManager> gameManager) :
+  _gameManager(gameManager)
+  , _leftBar(nullptr)
   , _rightBar(nullptr)
   , _ball(nullptr)
 {
@@ -34,6 +35,19 @@ GameplayLayer::GameplayLayer() :
 
 GameplayLayer::~GameplayLayer()
 {
+}
+
+GameplayLayer * GameplayLayer::create(std::shared_ptr<GameManager> gameManager)
+{
+  GameplayLayer * obj = new GameplayLayer(gameManager);
+
+  if (obj && obj->init()) {
+    obj->autorelease();
+    return obj;
+  }
+
+  CC_SAFE_DELETE(obj);
+  return nullptr;
 }
 
 bool GameplayLayer::init()
@@ -191,6 +205,7 @@ void GameplayLayer::update(float dt)
 {
   cocos2d::Layer::update(dt);
 
+  _gameManager->addTimer(-dt);
 }
 
 bool GameplayLayer::onContactBegin(cocos2d::PhysicsContact & contact)

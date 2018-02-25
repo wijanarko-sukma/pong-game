@@ -1,5 +1,7 @@
 #include "GameScene.h"
+#include "Gameplay/GameManager.h"
 #include "Layers/GameplayLayer.h"
+#include "Layers/GameUILayer.h"
 
 GameScene::GameScene()
 {
@@ -29,7 +31,8 @@ bool GameScene::initWithPhysics()
     this->getPhysicsWorld()->setDebugDrawMask(cocos2d::PhysicsWorld::DEBUGDRAW_ALL);
     this->getPhysicsWorld()->setGravity(cocos2d::Vec2::ZERO);
     this->getPhysicsWorld()->setFixedUpdateRate(1 / 60.0);
-    auto gameplayLayer = GameplayLayer::create();
+    std::shared_ptr<GameManager> gameManager = std::make_shared<GameManager>();
+    auto gameplayLayer = GameplayLayer::create(gameManager);
     this->addChild(gameplayLayer);
     return true;
   }

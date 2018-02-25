@@ -5,18 +5,20 @@
 #include "ui/CocosGUI.h"
 #include "GameObjects/BallObject.h"
 #include "GameObjects/BarObject.h"
+#include "Gameplay/GameManager.h"
 
 class GameplayLayer : public cocos2d::Layer
 {
 CC_CONSTRUCTOR_ACCESS:
-  GameplayLayer();
+  GameplayLayer(std::shared_ptr<GameManager> gameManager);
   ~GameplayLayer();
 
 public:
+  static GameplayLayer * create(std::shared_ptr<GameManager> gameManager);
   bool init() override;
 
-  CREATE_FUNC(GameplayLayer);
 private:
+  std::shared_ptr<GameManager> _gameManager;
   BarObject * _leftBar;
   BarObject * _rightBar;
   BallObject * _ball;
