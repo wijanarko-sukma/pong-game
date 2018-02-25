@@ -80,6 +80,30 @@ void GameplayLayer::constructArena()
   arena->setTag(ObjectTag::ArenaTag);
   arena->setPhysicsBody(arenaBounding);
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+  cocos2d::Size buttonSize = playSize / 4;
+
+  cocos2d::ui::Widget * leftUpperButton = this->createInvisibleButton(buttonSize, CC_CALLBACK_2(GameplayLayer::onUpperButtonTouched, this));
+  leftUpperButton->setPosition(cocos2d::Vec2(buttonSize.width / 2 + 20, playSize.height / 2 + buttonSize.height / 2));
+  leftUpperButton->setTag(PlayerSide::LeftPlayer);
+  arena->addChild(leftUpperButton);
+
+  cocos2d::ui::Widget * leftBottomButton = this->createInvisibleButton(buttonSize, CC_CALLBACK_2(GameplayLayer::onBottomButtonTouched, this));
+  leftBottomButton->setPosition(cocos2d::Vec2(buttonSize.width / 2 + 20, buttonSize.height / 2));
+  leftBottomButton->setTag(PlayerSide::LeftPlayer);
+  arena->addChild(leftBottomButton);
+
+  cocos2d::ui::Widget * rightUpperButton = this->createInvisibleButton(buttonSize, CC_CALLBACK_2(GameplayLayer::onUpperButtonTouched, this));
+  rightUpperButton->setPosition(cocos2d::Vec2(playSize.width - buttonSize.width / 2 - 20, playSize.height / 2 + buttonSize.height / 2));
+  rightUpperButton->setTag(PlayerSide::RightPlayer);
+  arena->addChild(rightUpperButton);
+
+  cocos2d::ui::Widget * rightBottomButton = this->createInvisibleButton(buttonSize, CC_CALLBACK_2(GameplayLayer::onBottomButtonTouched, this));
+  rightBottomButton->setPosition(cocos2d::Vec2(playSize.width - buttonSize.width / 2 - 20, buttonSize.height / 2));
+  rightBottomButton->setTag(PlayerSide::RightPlayer);
+  arena->addChild(rightBottomButton);
+#endif
+
   cocos2d::Node * leftGoal = this->createGoal(playSize.height, PhysicsCategory::LeftGoalBitmask);
   leftGoal->setPosition(cocos2d::Vec2(20, playSize.height / 2));
   arena->addChild(leftGoal);
@@ -152,6 +176,15 @@ cocos2d::Node * GameplayLayer::createGoal(float length, int type)
   goal->setPhysicsBody(goalBounding);
 
   return goal;
+}
+
+cocos2d::ui::Widget * GameplayLayer::createInvisibleButton(const cocos2d::Size & contentSize, const std::function<void(cocos2d::Ref *, cocos2d::ui::Widget::TouchEventType)> & callback)
+{
+  cocos2d::ui::Widget * invisibleButton = cocos2d::ui::Widget::create();
+  invisibleButton->setContentSize(contentSize);
+  invisibleButton->addTouchEventListener(callback);
+
+  return invisibleButton;
 }
 
 void GameplayLayer::startGame()
@@ -269,6 +302,40 @@ void GameplayLayer::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos
   case cocos2d::EventKeyboard::KeyCode::KEY_UP_ARROW:
   case cocos2d::EventKeyboard::KeyCode::KEY_DOWN_ARROW:
     this->changeBarDirection(_bars.at(PlayerSide::RightPlayer), BarDirection::None);
+    break;
+  default:
+    break;
+  }
+}
+
+void GameplayLayer::onUpperButtonTouched(cocos2d::Ref * ref, cocos2d::ui::Widget::TouchEventType eventType)
+{
+  cocos2d::Node * obj = dynamic_cast<cocos2d::Node *>(ref);
+  PlayerSide side = (PlayerSide)obj->getTag();
+  switch (eventType) {
+  case cocos2d::ui::Widget::TouchEventType::BEGAN:
+    this->changeBarDirection(_bars.at(side), BarDirection::Up);
+    break;
+  case cocos2d::ui::Widget::TouchEventType::CANCELED:
+  case cocos2d::ui::Widget::TouchEventType::ENDED:
+    this->changeBarDirection(_bars.at(side), BarDirection::None);
+    break;
+  default:
+    break;
+  }
+}
+
+void GameplayLayer::onBottomButtonTouched(cocos2d::Ref * ref, cocos2d::ui::Widget::TouchEventType eventType)
+{
+  cocos2d::Node * obj = dynamic_cast<cocos2d::Node *>(ref);
+  PlayerSide side = (PlayerSide)obj->getTag();
+  switch (eventType) {
+  case cocos2d::ui::Widget::TouchEventType::BEGAN:
+    this->changeBarDirection(_bars.at(side), BarDirection::Down);
+    break;
+  case cocos2d::ui::Widget::TouchEventType::CANCELED:
+  case cocos2d::ui::Widget::TouchEventType::ENDED:
+    this->changeBarDirection(_bars.at(side), BarDirection::None);
     break;
   default:
     break;

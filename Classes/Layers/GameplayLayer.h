@@ -2,6 +2,7 @@
 #define _GAMEPLAY_LAYER_
 
 #include <map>
+#include <functional>
 #include "cocos2d.h"
 #include "ui/CocosGUI.h"
 #include "GameObjects/BallObject.h"
@@ -27,6 +28,7 @@ private:
   BarObject * createBar(const std::string & filename, const cocos2d::Size & barSize);
   BallObject * createBall(const std::string & filename, float radius);
   cocos2d::Node * createGoal(float length, int type);
+  cocos2d::ui::Widget * createInvisibleButton(const cocos2d::Size & contentSize, const std::function<void(cocos2d::Ref *, cocos2d::ui::Widget::TouchEventType eventType)> & callback);
   void startGame();
   void changeBarDirection(BarObject * bar, BarDirection dir);
   void restrictPreviousBarDirection(BarObject * bar);
@@ -36,6 +38,9 @@ private:
   bool onContactBegin(cocos2d::PhysicsContact & contact);
   void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event * event);
   void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event * event);
+
+  void onUpperButtonTouched(cocos2d::Ref * sender, cocos2d::ui::Widget::TouchEventType eventType);
+  void onBottomButtonTouched(cocos2d::Ref * sender, cocos2d::ui::Widget::TouchEventType eventType);
 };
 
 #endif
