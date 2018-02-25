@@ -152,7 +152,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\GameObjects\BallObject.cpp" />
     <ClCompile Include="..\Classes\GameObjects\BarObject.cpp" />
     <ClCompile Include="..\Classes\GameObjects\DynamicObject.cpp" />
-    <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
+    <ClCompile Include="..\Classes\Gameplay\GameManager.cpp" />
     <ClCompile Include="..\Classes\Layers\GameplayLayer.cpp" />
     <ClCompile Include="..\Classes\Layers\GameUILayer.cpp" />
     <ClCompile Include="..\Classes\Layers\MainUILayer.cpp" />
@@ -165,8 +165,8 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\GameObjects\BallObject.h" />
     <ClInclude Include="..\Classes\GameObjects\BarObject.h" />
     <ClInclude Include="..\Classes\GameObjects\DynamicObject.h" />
+    <ClInclude Include="..\Classes\Gameplay\GameManager.h" />
     <ClInclude Include="..\Classes\Global.h" />
-    <ClInclude Include="..\Classes\HelloWorldScene.h" />
     <ClInclude Include="..\Classes\Layers\GameplayLayer.h" />
     <ClInclude Include="..\Classes\Layers\GameUILayer.h" />
     <ClInclude Include="..\Classes\Layers\MainUILayer.h" />

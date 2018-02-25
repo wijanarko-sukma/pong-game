@@ -19,15 +19,15 @@
     <Filter Include="src\GameObjects">
       <UniqueIdentifier>{06fcb027-246c-4b85-88f9-5ae489016335}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Gameplay">
+      <UniqueIdentifier>{0ffdefff-1000-499a-b5ed-3d2d3f94bf8a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>win32</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\AppDelegate.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\HelloWorldScene.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\Scenes\MainScene.cpp">
@@ -54,15 +54,15 @@
     <ClCompile Include="..\Classes\GameObjects\BarObject.cpp">
       <Filter>src\GameObjects</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\Gameplay\GameManager.cpp">
+      <Filter>src\Gameplay</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
       <Filter>win32</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\AppDelegate.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\HelloWorldScene.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Scenes\MainScene.h">
@@ -91,6 +91,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\GameObjects\BarObject.h">
       <Filter>src\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Gameplay\GameManager.h">
+      <Filter>src\Gameplay</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
