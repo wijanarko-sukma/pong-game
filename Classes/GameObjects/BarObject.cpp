@@ -2,6 +2,8 @@
 
 BarObject::BarObject() :
   DynamicObject()
+  , _barDirection(BarDirection::None)
+  , _restriction(BarDirection::None)
 {
 }
 
@@ -34,21 +36,38 @@ bool BarObject::init(const std::string & filename, double width, double height)
   return false;
 }
 
+BarDirection BarObject::getBarDirection() const
+{
+  return _barDirection;
+}
+
 void BarObject::setBarDirection(BarDirection direction)
 {
+  if ((direction != BarDirection::None && (_restriction == direction || _barDirection != BarDirection::None)) || _barDirection == direction) {
+    return;
+  }
+
   float directionY = 0.0;
 
   switch (direction)
   {
   case Up:
     directionY = 1;
+    this->restrictDirection(BarDirection::None);
     break;
   case Down:
     directionY = -1;
+    this->restrictDirection(BarDirection::None);
     break;
   default:
     break;
   }
 
   this->setDirection(0.0, directionY);
+  _barDirection = direction;
+}
+
+void BarObject::restrictDirection(BarDirection direction)
+{
+  _restriction = direction;
 }

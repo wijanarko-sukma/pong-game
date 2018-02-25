@@ -41,7 +41,6 @@ bool GameplayLayer::init()
   if (Layer::init()) {
     this->constructObjects();
     this->startGame();
-    this->scheduleUpdate();
     return true;
   }
   return false;
@@ -94,10 +93,6 @@ void GameplayLayer::constructObjects()
   _ball->setPosition(cocos2d::Vec2(playSize.width / 2, playSize.height / 2));
   _ball->setTag(ObjectTag::BallTag);
   arena->addChild(_ball);
-
-  cocos2d::EventListenerPhysicsContact * contactListener = cocos2d::EventListenerPhysicsContact::create();
-  contactListener->onContactBegin = CC_CALLBACK_1(GameplayLayer::onContactBegin, this);
-  _eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 }
 
 BarObject * GameplayLayer::createBar(const std::string & filename, const cocos2d::Size & barSize)
@@ -122,6 +117,7 @@ BallObject * GameplayLayer::createBall(const std::string & filename, float radiu
   cocos2d::PhysicsBody * boundingCircle = cocos2d::PhysicsBody::createCircle(radius, cocos2d::PhysicsMaterial(0.1f, 1.0f, 0.0f));
   boundingCircle->setDynamic(true);
   boundingCircle->setGravityEnable(false);
+  boundingCircle->setRotationEnable(false);
   boundingCircle->setCategoryBitmask(PhysicsCategory::BallBitmask);
   boundingCircle->setCollisionBitmask(PhysicsCategory::ArenaBitmask | PhysicsCategory::BarBitmask);
   boundingCircle->setContactTestBitmask(PhysicsCategory::ArenaBitmask | PhysicsCategory::BarBitmask);
@@ -154,17 +150,41 @@ void GameplayLayer::startGame()
   cocos2d::Vec2 ballDirection = cocos2d::Vec2(cocos2d::RandomHelper::random_real<float>(-100.0, 100.0), cocos2d::RandomHelper::random_real<float>(-100.0, 100.0));
   ballDirection.normalize();
   _ball->setDirection(ballDirection);
+
+  this->scheduleUpdate();
 }
 
-bool GameplayLayer::onContactBegin(cocos2d::PhysicsContact & contact)
+void GameplayLayer::changeBarDirection(BarObject * bar, BarDirection dir)
 {
-  
-  return true;
+  if (bar != nullptr) {
+    bar->setBarDirection(dir);
+  }
+}
+
+void GameplayLayer::restrictPreviousBarDirection(BarObject * bar)
+{
+  if (bar != nullptr) {
+    BarDirection prevDirection = bar->getBarDirection();
+    bar->restrictDirection(prevDirection);
+    this->changeBarDirection(bar, BarDirection::None);
+  }
 }
 
 void GameplayLayer::onEnter()
 {
   cocos2d::Layer::onEnter();
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+  auto listener = cocos2d::EventListenerKeyboard::create();
+  listener->onKeyPressed = CC_CALLBACK_2(GameplayLayer::onKeyPressed, this);
+  listener->onKeyReleased = CC_CALLBACK_2(GameplayLayer::onKeyReleased, this);
+  _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#endif
+
+  cocos2d::EventListenerPhysicsContact * contactListener = cocos2d::EventListenerPhysicsContact::create();
+  contactListener->onContactBegin = CC_CALLBACK_1(GameplayLayer::onContactBegin, this);
+  _eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 }
 
 void GameplayLayer::update(float dt)
@@ -173,4 +193,69 @@ void GameplayLayer::update(float dt)
 
 }
 
+bool GameplayLayer::onContactBegin(cocos2d::PhysicsContact & contact)
+{
+  auto shapeA = contact.getShapeA();
+  auto shapeB = contact.getShapeB();
+  
+  if ((shapeA->getCategoryBitmask() | shapeB->getCategoryBitmask()) == (PhysicsCategory::ArenaBitmask | PhysicsCategory::BarBitmask)) {
+    BarObject * bar = nullptr;
+    if (shapeA->getCategoryBitmask() == PhysicsCategory::BarBitmask) {
+      bar = dynamic_cast<BarObject*>(shapeA->getBody()->getNode());
+    }
+    else {
+      bar = dynamic_cast<BarObject*>(shapeB->getBody()->getNode());
+    }
+    this->restrictPreviousBarDirection(bar);
+  }
+  else if ((shapeA->getCategoryBitmask() | shapeB->getCategoryBitmask()) == (PhysicsCategory::BarBitmask | PhysicsCategory::BallBitmask)) {
+    DynamicObject * ball = nullptr;
+    if (shapeA->getCategoryBitmask() == PhysicsCategory::BallBitmask) {
+      ball = dynamic_cast<DynamicObject*>(shapeA->getBody()->getNode());
+    }
+    else {
+      ball = dynamic_cast<DynamicObject*> (shapeB->getBody()->getNode());
+    }
+    float speed = ball->getSpeed() + SPEED_ADDITION;
+    if (speed <= SPEED_LIMIT) {
+      ball->setSpeed(speed);
+    }
+  }
+  return true;
+}
 
+void GameplayLayer::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event * event)
+{
+  switch (keyCode) {
+  case cocos2d::EventKeyboard::KeyCode::KEY_W:
+    this->changeBarDirection(_leftBar, BarDirection::Up);
+    break;
+  case cocos2d::EventKeyboard::KeyCode::KEY_S:
+    this->changeBarDirection(_leftBar, BarDirection::Down);
+    break;
+  case cocos2d::EventKeyboard::KeyCode::KEY_UP_ARROW:
+    this->changeBarDirection(_rightBar, BarDirection::Up);
+    break;
+  case cocos2d::EventKeyboard::KeyCode::KEY_DOWN_ARROW:
+    this->changeBarDirection(_rightBar, BarDirection::Down);
+    break;
+  default:
+    break;
+  }
+}
+
+void GameplayLayer::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event * event)
+{
+  switch (keyCode) {
+  case cocos2d::EventKeyboard::KeyCode::KEY_W:
+  case cocos2d::EventKeyboard::KeyCode::KEY_S:
+    this->changeBarDirection(_leftBar, BarDirection::None);
+    break;
+  case cocos2d::EventKeyboard::KeyCode::KEY_UP_ARROW:
+  case cocos2d::EventKeyboard::KeyCode::KEY_DOWN_ARROW:
+    this->changeBarDirection(_rightBar, BarDirection::None);
+    break;
+  default:
+    break;
+  }
+}

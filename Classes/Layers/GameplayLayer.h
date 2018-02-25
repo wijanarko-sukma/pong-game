@@ -26,10 +26,14 @@ private:
   BallObject * createBall(const std::string & filename, float radius);
   cocos2d::Node * createGoal(float length, int type);
   void startGame();
-  bool onContactBegin(cocos2d::PhysicsContact & contact);
+  void changeBarDirection(BarObject * bar, BarDirection dir);
+  void restrictPreviousBarDirection(BarObject * bar);
 
   void onEnter() override;
   void update(float dt) override;
+  bool onContactBegin(cocos2d::PhysicsContact & contact);
+  void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event * event);
+  void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event * event);
 };
 
 #endif

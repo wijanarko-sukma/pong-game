@@ -21,9 +21,14 @@ CC_CONSTRUCTOR_ACCESS:
 
 public:
   static BarObject * create(const std::string & filename, double width, double height);
+  BarDirection getBarDirection() const;
   void setBarDirection(BarDirection direction);
+  void restrictDirection(BarDirection direction);
 
 protected:
+  BarDirection _barDirection;
+  BarDirection _restriction;
+
   bool init(const std::string & filename, double width, double height);
 };
 
