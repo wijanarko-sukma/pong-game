@@ -1,6 +1,7 @@
 #ifndef _GAMEPLAY_LAYER_
 #define _GAMEPLAY_LAYER_
 
+#include <map>
 #include "cocos2d.h"
 #include "ui/CocosGUI.h"
 #include "GameObjects/BallObject.h"
@@ -19,8 +20,7 @@ public:
 
 private:
   std::shared_ptr<GameManager> _gameManager;
-  BarObject * _leftBar;
-  BarObject * _rightBar;
+  std::map<PlayerSide, BarObject *> _bars;
   BallObject * _ball;
 
   void constructArena();

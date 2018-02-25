@@ -27,8 +27,6 @@ enum ObjectTag
 
 GameplayLayer::GameplayLayer(std::shared_ptr<GameManager> gameManager) :
   _gameManager(gameManager)
-  , _leftBar(nullptr)
-  , _rightBar(nullptr)
   , _ball(nullptr)
 {
 }
@@ -93,15 +91,17 @@ void GameplayLayer::constructArena()
   cocos2d::Size barSize = cocos2d::Size(30, 120);
   cocos2d::Size barBodySize = cocos2d::Size(barSize.width - 4, barSize.height - 4);
 
-  _leftBar = this->createBar("bar_green.png", barSize);
-  _leftBar->setPosition(cocos2d::Vec2(barSize.width / 2 + 60, playSize.height / 2));
-  _leftBar->setTag(ObjectTag::LeftBarTag);
-  arena->addChild(_leftBar);
+  BarObject * leftBar = this->createBar("bar_green.png", barSize);
+  leftBar->setPosition(cocos2d::Vec2(barSize.width / 2 + 60, playSize.height / 2));
+  leftBar->setTag(ObjectTag::LeftBarTag);
+  arena->addChild(leftBar);
+  _bars.insert(std::make_pair(PlayerSide::LeftPlayer, leftBar));
 
-  _rightBar = this->createBar("bar_orange.png", barSize);
-  _rightBar->setPosition(cocos2d::Vec2(playSize.width - barSize.width / 2 - 60, playSize.height / 2));
-  _rightBar->setTag(ObjectTag::RightBarTag);
-  arena->addChild(_rightBar);
+  BarObject * rightBar  = this->createBar("bar_orange.png", barSize);
+  rightBar->setPosition(cocos2d::Vec2(playSize.width - barSize.width / 2 - 60, playSize.height / 2));
+  rightBar->setTag(ObjectTag::RightBarTag);
+  arena->addChild(rightBar);
+  _bars.insert(std::make_pair(PlayerSide::RightPlayer, rightBar));
 
   _ball = this->createBall("ball.png", 15.0);
   _ball->setPosition(cocos2d::Vec2(playSize.width / 2, playSize.height / 2));
@@ -156,8 +156,8 @@ cocos2d::Node * GameplayLayer::createGoal(float length, int type)
 
 void GameplayLayer::startGame()
 {
-  _leftBar->setSpeed(SPEED);
-  _rightBar->setSpeed(SPEED);
+  _bars.at(PlayerSide::LeftPlayer)->setSpeed(SPEED);
+  _bars.at(PlayerSide::RightPlayer)->setSpeed(SPEED);
 
   _ball->setSpeed(1.5 * SPEED);
 
@@ -243,16 +243,16 @@ void GameplayLayer::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2
 {
   switch (keyCode) {
   case cocos2d::EventKeyboard::KeyCode::KEY_W:
-    this->changeBarDirection(_leftBar, BarDirection::Up);
+    this->changeBarDirection(_bars.at(PlayerSide::LeftPlayer), BarDirection::Up);
     break;
   case cocos2d::EventKeyboard::KeyCode::KEY_S:
-    this->changeBarDirection(_leftBar, BarDirection::Down);
+    this->changeBarDirection(_bars.at(PlayerSide::LeftPlayer), BarDirection::Down);
     break;
   case cocos2d::EventKeyboard::KeyCode::KEY_UP_ARROW:
-    this->changeBarDirection(_rightBar, BarDirection::Up);
+    this->changeBarDirection(_bars.at(PlayerSide::RightPlayer), BarDirection::Up);
     break;
   case cocos2d::EventKeyboard::KeyCode::KEY_DOWN_ARROW:
-    this->changeBarDirection(_rightBar, BarDirection::Down);
+    this->changeBarDirection(_bars.at(PlayerSide::RightPlayer), BarDirection::Down);
     break;
   default:
     break;
@@ -264,11 +264,11 @@ void GameplayLayer::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos
   switch (keyCode) {
   case cocos2d::EventKeyboard::KeyCode::KEY_W:
   case cocos2d::EventKeyboard::KeyCode::KEY_S:
-    this->changeBarDirection(_leftBar, BarDirection::None);
+    this->changeBarDirection(_bars.at(PlayerSide::LeftPlayer), BarDirection::None);
     break;
   case cocos2d::EventKeyboard::KeyCode::KEY_UP_ARROW:
   case cocos2d::EventKeyboard::KeyCode::KEY_DOWN_ARROW:
-    this->changeBarDirection(_rightBar, BarDirection::None);
+    this->changeBarDirection(_bars.at(PlayerSide::RightPlayer), BarDirection::None);
     break;
   default:
     break;
