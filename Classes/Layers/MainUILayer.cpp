@@ -26,10 +26,10 @@ void MainUILayer::constructMenu()
   cocos2d::Vec2 visibleOrigin = cocos2d::Director::getInstance()->getVisibleOrigin();
 
   cocos2d::Size buttonSize = cocos2d::Size(320, 100);
-  std::string fontName = "fonts/Marker Felt.ttf";
+  std::string fontName = "fonts/divlit.ttf";
   int fontSize = 44;
 
-  cocos2d::ui::Text * title = cocos2d::ui::Text::create("Pong Game", fontName, fontSize + 24);
+  cocos2d::ui::Text * title = cocos2d::ui::Text::create("PONG GAME", fontName, fontSize + 24);
   title->setTextColor(cocos2d::Color4B(0, 0, 0, 255));
   title->enableOutline(cocos2d::Color4B(255, 255, 255, 255), 4);
   title->setPosition(cocos2d::Vec2(visibleOrigin.x + visibleSize.width / 2, visibleOrigin.y + visibleSize.height * 0.75));
@@ -43,7 +43,7 @@ void MainUILayer::constructMenu()
   greenButton->setPosition(cocos2d::Vec2(visibleOrigin.x + visibleSize.width / 2, visibleOrigin.y + visibleSize.height / 2 + buttonSize.height / 2 - 20));
   this->addChild(greenButton);
 
-  cocos2d::ui::Text * startText = cocos2d::ui::Text::create("Start", fontName, fontSize);
+  cocos2d::ui::Text * startText = cocos2d::ui::Text::create("START", fontName, fontSize);
   startText->setTextColor(cocos2d::Color4B(255, 255, 255, 255));
   startText->enableOutline(cocos2d::Color4B(0, 0, 0, 255), 4);
   startText->setPosition(cocos2d::Vec2(buttonSize.width / 2, buttonSize.height / 2));
@@ -57,7 +57,7 @@ void MainUILayer::constructMenu()
   redButton->setPosition(cocos2d::Vec2(visibleOrigin.x + visibleSize.width / 2, visibleOrigin.y + visibleSize.height / 2 - buttonSize.height / 2 - 40));
   this->addChild(redButton);
 
-  cocos2d::ui::Text * exitText = cocos2d::ui::Text::create("Exit", fontName, fontSize);
+  cocos2d::ui::Text * exitText = cocos2d::ui::Text::create("EXIT", fontName, fontSize);
   exitText->setTextColor(cocos2d::Color4B(255, 255, 255, 255));
   exitText->enableOutline(cocos2d::Color4B(0, 0, 0, 255), 4);
   exitText->setPosition(cocos2d::Vec2(buttonSize.width / 2, buttonSize.height / 2));
