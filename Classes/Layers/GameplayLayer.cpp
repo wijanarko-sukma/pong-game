@@ -1,6 +1,10 @@
 #include "GameplayLayer.h"
 #include "Global.h"
 
+constexpr float SPEED = 200.0;
+constexpr float SPEED_LIMIT = 600.0;
+constexpr float SPEED_ADDITION = 10.0;
+
 enum PhysicsCategory
 {
   NoneBitmask = 0,
@@ -142,11 +146,10 @@ cocos2d::Node * GameplayLayer::createGoal(float length, int type)
 
 void GameplayLayer::startGame()
 {
-  double speed = 150.0;
-  _leftBar->setSpeed(speed);
-  _rightBar->setSpeed(speed);
+  _leftBar->setSpeed(SPEED);
+  _rightBar->setSpeed(SPEED);
 
-  _ball->setSpeed(2 * speed);
+  _ball->setSpeed(1.5 * SPEED);
 
   cocos2d::Vec2 ballDirection = cocos2d::Vec2(cocos2d::RandomHelper::random_real<float>(-100.0, 100.0), cocos2d::RandomHelper::random_real<float>(-100.0, 100.0));
   ballDirection.normalize();
