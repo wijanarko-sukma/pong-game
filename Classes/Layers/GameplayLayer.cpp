@@ -53,14 +53,14 @@ GameplayLayer * GameplayLayer::create(std::shared_ptr<GameManager> gameManager)
 bool GameplayLayer::init()
 {
   if (Layer::init()) {
-    this->constructObjects();
+    this->constructArena();
     this->startGame();
     return true;
   }
   return false;
 }
 
-void GameplayLayer::constructObjects()
+void GameplayLayer::constructArena()
 {
   cocos2d::Director * director = cocos2d::Director::getInstance();
   cocos2d::Size visibleSize = director->getVisibleSize();
