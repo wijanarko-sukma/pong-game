@@ -1,7 +1,8 @@
 #include "DynamicObject.h"
 
 DynamicObject::DynamicObject() :
-  _speed(0.0)
+  cocos2d::ui::Scale9Sprite()
+  , _speed(0.0)
   , _direction(cocos2d::Vec2::ZERO)
 {
 }
