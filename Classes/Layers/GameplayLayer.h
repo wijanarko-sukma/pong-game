@@ -20,6 +20,7 @@ public:
   bool init() override;
 
 private:
+  bool _isPaused;
   std::shared_ptr<GameManager> _gameManager;
   std::map<PlayerSide, BarObject *> _bars;
   BallObject * _ball;
