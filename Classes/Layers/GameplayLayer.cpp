@@ -4,6 +4,7 @@
 constexpr float SPEED = 200.0;
 constexpr float SPEED_LIMIT = 600.0;
 constexpr float SPEED_ADDITION = 10.0;
+constexpr float COUNTDOWN_START_TIME = 3.0;
 
 enum PhysicsCategory
 {
@@ -29,6 +30,8 @@ GameplayLayer::GameplayLayer(std::shared_ptr<GameManager> gameManager) :
   _isPaused(false)
   , _gameManager(gameManager)
   , _ball(nullptr)
+  , _countdownTime(0.0)
+  , _countdownText(nullptr)
 {
 }
 
@@ -53,7 +56,7 @@ bool GameplayLayer::init()
 {
   if (Layer::init()) {
     this->constructArena();
-    this->startGame();
+    this->prepareGame();
     return true;
   }
   return false;
@@ -104,6 +107,12 @@ void GameplayLayer::constructArena()
   rightBottomButton->setTag(PlayerSide::RightPlayer);
   arena->addChild(rightBottomButton);
 #endif
+
+  _countdownText = cocos2d::ui::Text::create(" ", "fonts/divlit.ttf", 120);
+  _countdownText->setTextColor(cocos2d::Color4B(0, 0, 0, 255));
+  _countdownText->enableOutline(cocos2d::Color4B(255, 255, 255, 255), 4);
+  _countdownText->setPosition(cocos2d::Vec2(playSize.width * 0.5f, playSize.height * 0.75f));
+  arena->addChild(_countdownText, 99);
 
   cocos2d::Node * leftGoal = this->createGoal(playSize.height, PhysicsCategory::LeftGoalBitmask);
   leftGoal->setPosition(cocos2d::Vec2(20, playSize.height / 2));
@@ -185,6 +194,16 @@ cocos2d::ui::Widget * GameplayLayer::createInvisibleButton(const cocos2d::Size &
   return invisibleButton;
 }
 
+void GameplayLayer::prepareGame()
+{
+  _countdownTime = COUNTDOWN_START_TIME;
+
+  this->setCountdownText((int)std::ceilf(_countdownTime));
+
+  _countdownText->runAction(cocos2d::FadeIn::create(0.0f));
+  this->schedule(CC_CALLBACK_1(GameplayLayer::countdownUpdate, this), 1.0f, "countdown_update");
+}
+
 void GameplayLayer::startGame()
 {
   _bars.at(PlayerSide::LeftPlayer)->setSpeed(SPEED);
@@ -215,6 +234,14 @@ void GameplayLayer::restrictPreviousBarDirection(BarObject * bar)
   }
 }
 
+void GameplayLayer::setCountdownText(int time)
+{
+  std::stringstream ss;
+  ss << time;
+
+  _countdownText->setString(ss.str());
+}
+
 void GameplayLayer::onEnter()
 {
   cocos2d::Layer::onEnter();
@@ -231,6 +258,19 @@ void GameplayLayer::onEnter()
   contactListener->onContactBegin = CC_CALLBACK_1(GameplayLayer::onContactBegin, this);
   contactListener->onContactPostSolve = CC_CALLBACK_1(GameplayLayer::onContactPostSolve, this);
   _eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
+}
+
+void GameplayLayer::countdownUpdate(float dt)
+{
+  if (!_isPaused) {
+    _countdownTime -= dt;
+    this->setCountdownText((int)std::ceilf(_countdownTime));
+    if (_countdownTime <= 0.0f) {
+      _countdownText->runAction(cocos2d::FadeOut::create(0.2f));
+      this->unschedule("countdown_update");
+      this->startGame();
+    }
+  }
 }
 
 void GameplayLayer::update(float dt)
