@@ -37,6 +37,7 @@ private:
   void onEnter() override;
   void update(float dt) override;
   bool onContactBegin(cocos2d::PhysicsContact & contact);
+  void onContactPostSolve(cocos2d::PhysicsContact & contact);
   void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event * event);
   void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event * event);
 

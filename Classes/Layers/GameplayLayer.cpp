@@ -232,6 +232,7 @@ void GameplayLayer::onEnter()
 
   cocos2d::EventListenerPhysicsContact * contactListener = cocos2d::EventListenerPhysicsContact::create();
   contactListener->onContactBegin = CC_CALLBACK_1(GameplayLayer::onContactBegin, this);
+  contactListener->onContactPostSolve = CC_CALLBACK_1(GameplayLayer::onContactPostSolve, this);
   _eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 }
 
@@ -273,6 +274,13 @@ bool GameplayLayer::onContactBegin(cocos2d::PhysicsContact & contact)
     }
   }
   return true;
+}
+
+void GameplayLayer::onContactPostSolve(cocos2d::PhysicsContact & contact)
+{
+  auto shapeA = contact.getShapeA();
+  auto shapeB = contact.getShapeB();
+
 }
 
 void GameplayLayer::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event * event)
