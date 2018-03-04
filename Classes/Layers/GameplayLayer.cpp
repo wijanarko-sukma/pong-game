@@ -257,19 +257,6 @@ bool GameplayLayer::onContactBegin(cocos2d::PhysicsContact & contact)
     }
     this->restrictPreviousBarDirection(bar);
   }
-  else if ((shapeA->getCategoryBitmask() | shapeB->getCategoryBitmask()) == (PhysicsCategory::BarBitmask | PhysicsCategory::BallBitmask)) {
-    DynamicObject * ball = nullptr;
-    if (shapeA->getCategoryBitmask() == PhysicsCategory::BallBitmask) {
-      ball = dynamic_cast<DynamicObject*>(shapeA->getBody()->getNode());
-    }
-    else {
-      ball = dynamic_cast<DynamicObject*> (shapeB->getBody()->getNode());
-    }
-    float speed = ball->getSpeed() + SPEED_ADDITION;
-    if (speed <= SPEED_LIMIT) {
-      ball->setSpeed(speed);
-    }
-  }
   return true;
 }
 
