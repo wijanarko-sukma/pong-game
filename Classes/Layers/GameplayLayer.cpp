@@ -28,6 +28,7 @@ enum ObjectTag
 
 GameplayLayer::GameplayLayer(std::shared_ptr<GameManager> gameManager) :
   _isPaused(false)
+  , _disableInput(false)
   , _gameManager(gameManager)
   , _ball(nullptr)
   , _countdownTime(0.0)
@@ -215,6 +216,8 @@ void GameplayLayer::startGame()
   ballDirection.normalize();
   _ball->setDirection(ballDirection);
 
+  _disableInput = false;
+
   this->scheduleUpdate();
 }
 
@@ -309,7 +312,7 @@ void GameplayLayer::onContactPostSolve(cocos2d::PhysicsContact & contact)
 
 void GameplayLayer::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event * event)
 {
-  if (_isPaused) {
+  if (_disableInput) {
     return;
   }
   switch (keyCode) {
@@ -332,7 +335,7 @@ void GameplayLayer::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2
 
 void GameplayLayer::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event * event)
 {
-  if (_isPaused) {
+  if (_disableInput) {
     return;
   }
   switch (keyCode) {
@@ -351,7 +354,7 @@ void GameplayLayer::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos
 
 void GameplayLayer::onUpperButtonTouched(cocos2d::Ref * ref, cocos2d::ui::Widget::TouchEventType eventType)
 {
-  if (_isPaused) {
+  if (_disableInput) {
     return;
   }
   cocos2d::Node * obj = dynamic_cast<cocos2d::Node *>(ref);
@@ -371,7 +374,7 @@ void GameplayLayer::onUpperButtonTouched(cocos2d::Ref * ref, cocos2d::ui::Widget
 
 void GameplayLayer::onBottomButtonTouched(cocos2d::Ref * ref, cocos2d::ui::Widget::TouchEventType eventType)
 {
-  if (_isPaused) {
+  if (_disableInput) {
     return;
   }
   cocos2d::Node * obj = dynamic_cast<cocos2d::Node *>(ref);

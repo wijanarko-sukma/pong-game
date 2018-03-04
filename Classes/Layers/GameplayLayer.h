@@ -20,6 +20,7 @@ public:
 
 private:
   bool _isPaused;
+  bool _disableInput;
   std::shared_ptr<GameManager> _gameManager;
   std::map<PlayerSide, BarObject *> _bars;
   BallObject * _ball;
