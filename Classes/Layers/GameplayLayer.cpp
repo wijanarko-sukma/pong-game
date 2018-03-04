@@ -143,7 +143,6 @@ BarObject * GameplayLayer::createBar(const std::string & filename, const cocos2d
   boundingBox->setCategoryBitmask(PhysicsCategory::BarBitmask);
   boundingBox->setCollisionBitmask(PhysicsCategory::ArenaBitmask | PhysicsCategory::BallBitmask);
   boundingBox->setContactTestBitmask(PhysicsCategory::ArenaBitmask | PhysicsCategory::BallBitmask);
-  boundingBox->setRotationEnable(false);
   bar->setPhysicsBody(boundingBox);
 
   return bar;
@@ -155,11 +154,9 @@ BallObject * GameplayLayer::createBall(const std::string & filename, float radiu
 
   cocos2d::PhysicsBody * boundingCircle = cocos2d::PhysicsBody::createCircle(radius, cocos2d::PhysicsMaterial(0.1f, 1.0f, 0.0f));
   boundingCircle->setDynamic(true);
-  boundingCircle->setGravityEnable(false);
-  boundingCircle->setRotationEnable(false);
   boundingCircle->setCategoryBitmask(PhysicsCategory::BallBitmask);
-  boundingCircle->setCollisionBitmask(PhysicsCategory::ArenaBitmask | PhysicsCategory::BarBitmask);
-  boundingCircle->setContactTestBitmask(PhysicsCategory::ArenaBitmask | PhysicsCategory::BarBitmask);
+  boundingCircle->setCollisionBitmask(PhysicsCategory::ArenaBitmask | PhysicsCategory::BarBitmask | PhysicsCategory::LeftGoalBitmask | PhysicsCategory::RightGoalBitmask);
+  boundingCircle->setContactTestBitmask(PhysicsCategory::ArenaBitmask | PhysicsCategory::BarBitmask | PhysicsCategory::LeftGoalBitmask | PhysicsCategory::RightGoalBitmask);
   ball->setPhysicsBody(boundingCircle);
 
   return ball;
@@ -172,7 +169,7 @@ cocos2d::Node * GameplayLayer::createGoal(float length, int type)
   cocos2d::PhysicsBody * goalBounding = cocos2d::PhysicsBody::createEdgeSegment(cocos2d::Vec2(0, length / 2), cocos2d::Vec2(0, -length / 2), cocos2d::PhysicsMaterial(0.1f, 1.0f, 0.0f));
   goalBounding->setDynamic(false);
   goalBounding->setCategoryBitmask(type);
-  goalBounding->setCollisionBitmask(PhysicsCategory::NoneBitmask);
+  goalBounding->setCollisionBitmask(PhysicsCategory::BallBitmask);
   goalBounding->setContactTestBitmask(PhysicsCategory::BallBitmask);
   goal->setPhysicsBody(goalBounding);
 
