@@ -33,10 +33,15 @@ bool GameScene::initWithPhysics()
     this->getPhysicsWorld()->setDebugDrawMask(cocos2d::PhysicsWorld::DEBUGDRAW_ALL);
     this->getPhysicsWorld()->setGravity(cocos2d::Vec2::ZERO);
     this->getPhysicsWorld()->setFixedUpdateRate(1 / 60.0);
+
     std::shared_ptr<GameManager> gameManager = std::make_shared<GameManager>();
     gameManager->setTimer(GAME_TIMER);
+
     auto gameplayLayer = GameplayLayer::create(gameManager);
     this->addChild(gameplayLayer);
+
+    auto gameUILayer = GameUILayer::create(gameManager);
+    this->addChild(gameUILayer);
     return true;
   }
 
