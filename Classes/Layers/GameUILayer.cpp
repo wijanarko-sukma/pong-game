@@ -50,7 +50,7 @@ void GameUILayer::constructMenu()
   rightScoreText->enableOutline(cocos2d::Color4B(255, 255, 255, 255), 4);
   rightScoreText->setPosition(cocos2d::Vec2(visibleOrigin.x + visibleSize.width * 0.8f, visibleOrigin.y + visibleSize.height * 0.9f));
   this->addChild(rightScoreText);
-  _scoreTexts.insert(std::make_pair(PlayerSide::LeftPlayer, leftScoreText));
+  _scoreTexts.insert(std::make_pair(PlayerSide::RightPlayer, rightScoreText));
   
   _timerText = cocos2d::ui::Text::create("0", "fonts/divlit.ttf", 120);
   _timerText->setTextColor(cocos2d::Color4B(0, 0, 0, 255));
