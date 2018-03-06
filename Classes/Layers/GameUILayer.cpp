@@ -84,8 +84,11 @@ void GameUILayer::setTimerText(int time)
 void GameUILayer::onEnterTransitionDidFinish()
 {
   cocos2d::LayerColor::onEnterTransitionDidFinish();
+
   this->setTimerText((int)std::ceilf(_gameManager->getTimer()));
   this->schedule(CC_CALLBACK_1(GameUILayer::updateTimer, this), 1.0f, "update_timer");
+
+  _eventDispatcher->addCustomEventListener("update_score", CC_CALLBACK_0(GameUILayer::updateScoreCallback, this));
 }
 
 void GameUILayer::updateTimer(float dt)
@@ -103,4 +106,19 @@ void GameUILayer::listenRedButtonTouch(cocos2d::Ref * sender, cocos2d::ui::Widge
   default:
     break;
   }
+}
+
+void GameUILayer::updateScoreCallback()
+{
+  this->updateScoreForPlayer(PlayerSide::LeftPlayer);
+  this->updateScoreForPlayer(PlayerSide::RightPlayer);
+}
+
+void GameUILayer::updateScoreForPlayer(PlayerSide side)
+{
+  int score = _gameManager->getPlayerScore(side);
+  std::stringstream ss;
+
+  ss << score;
+  _scoreTexts.at(side)->setString(ss.str());
 }

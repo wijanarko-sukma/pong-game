@@ -275,6 +275,7 @@ void GameplayLayer::scoreGoal(PlayerSide side)
   int score = _gameManager->getPlayerScore(side) + 1;
   _gameManager->setPlayerScore(side, score);
   this->prepareGame();
+  _eventDispatcher->dispatchCustomEvent("update_score");
 }
 
 void GameplayLayer::onEnter()

@@ -29,6 +29,8 @@ protected:
   void updateTimer(float dt);
 
   void listenRedButtonTouch(cocos2d::Ref * sender, cocos2d::ui::Widget::TouchEventType eventType);
+  void updateScoreCallback();
+  void updateScoreForPlayer(PlayerSide side);
 };
 
 #endif
