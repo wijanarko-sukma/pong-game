@@ -75,14 +75,14 @@ void GameplayLayer::constructArena()
   cocos2d::ui::Widget * arena = cocos2d::ui::Widget::create();
   arena->setContentSize(playSize);
   arena->setPosition(cocos2d::Vec2(visibleOrigin.x + visibleSize.width / 2, (screenSize.height - gameSize.height) / 2 + playSize.height / 2));
-  this->addChild(arena);
+  arena->setTag(ObjectTag::ArenaTag);
+  this->addChild(arena, 0, "arena");
 
   cocos2d::PhysicsBody * arenaBounding = cocos2d::PhysicsBody::createEdgeBox(playSize, cocos2d::PhysicsMaterial(0.1f, 1.0f, 0.0f));
   arenaBounding->setDynamic(false);
   arenaBounding->setCategoryBitmask(PhysicsCategory::ArenaBitmask);
   arenaBounding->setCollisionBitmask(PhysicsCategory::BarBitmask | PhysicsCategory::BallBitmask);
   arenaBounding->setContactTestBitmask(PhysicsCategory::BarBitmask | PhysicsCategory::BallBitmask);
-  arena->setTag(ObjectTag::ArenaTag);
   arena->setPhysicsBody(arenaBounding);
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -127,21 +127,14 @@ void GameplayLayer::constructArena()
   cocos2d::Size barBodySize = cocos2d::Size(barSize.width - 4, barSize.height - 4);
 
   BarObject * leftBar = this->createBar("bar_green.png", barSize);
-  leftBar->setPosition(cocos2d::Vec2(barSize.width / 2 + 60, playSize.height / 2));
   leftBar->setTag(ObjectTag::LeftBarTag);
   arena->addChild(leftBar);
   _bars.insert(std::make_pair(PlayerSide::LeftPlayer, leftBar));
 
   BarObject * rightBar  = this->createBar("bar_orange.png", barSize);
-  rightBar->setPosition(cocos2d::Vec2(playSize.width - barSize.width / 2 - 60, playSize.height / 2));
   rightBar->setTag(ObjectTag::RightBarTag);
   arena->addChild(rightBar);
   _bars.insert(std::make_pair(PlayerSide::RightPlayer, rightBar));
-
-  _ball = this->createBall("ball.png", 15.0);
-  _ball->setPosition(cocos2d::Vec2(playSize.width / 2, playSize.height / 2));
-  _ball->setTag(ObjectTag::BallTag);
-  arena->addChild(_ball);
 }
 
 BarObject * GameplayLayer::createBar(const std::string & filename, const cocos2d::Size & barSize)
@@ -158,18 +151,22 @@ BarObject * GameplayLayer::createBar(const std::string & filename, const cocos2d
   return bar;
 }
 
-BallObject * GameplayLayer::createBall(const std::string & filename, float radius)
+BallObject * GameplayLayer::createBall(const std::string & filename)
 {
   BallObject * ball = BallObject::create(filename);
 
+  return ball;
+}
+
+cocos2d::PhysicsBody * GameplayLayer::createBallBounding(float radius)
+{
   cocos2d::PhysicsBody * boundingCircle = cocos2d::PhysicsBody::createCircle(radius, cocos2d::PhysicsMaterial(0.1f, 1.0f, 0.0f));
   boundingCircle->setDynamic(true);
   boundingCircle->setCategoryBitmask(PhysicsCategory::BallBitmask);
   boundingCircle->setCollisionBitmask(PhysicsCategory::ArenaBitmask | PhysicsCategory::BarBitmask | PhysicsCategory::LeftGoalBitmask | PhysicsCategory::RightGoalBitmask);
   boundingCircle->setContactTestBitmask(PhysicsCategory::ArenaBitmask | PhysicsCategory::BarBitmask | PhysicsCategory::LeftGoalBitmask | PhysicsCategory::RightGoalBitmask);
-  ball->setPhysicsBody(boundingCircle);
 
-  return ball;
+  return boundingCircle;
 }
 
 cocos2d::Node * GameplayLayer::createGoal(float length, int type)
@@ -197,8 +194,34 @@ cocos2d::ui::Widget * GameplayLayer::createInvisibleButton(const cocos2d::Size &
 
 void GameplayLayer::prepareGame()
 {
-  _countdownTime = COUNTDOWN_START_TIME;
+  this->unscheduleUpdate();
+  _disableInput = true;
 
+  auto arena = this->getChildByName("arena");
+  cocos2d::Size playSize = arena->getContentSize();
+
+  auto leftBar = _bars.at(PlayerSide::LeftPlayer);
+  leftBar->setBarDirection(BarDirection::None);
+  leftBar->restrictDirection(BarDirection::None);
+  leftBar->setPosition(cocos2d::Vec2(leftBar->getContentSize().width / 2 + 60, playSize.height / 2));
+
+  auto rightBar = _bars.at(PlayerSide::RightPlayer);
+  rightBar->setBarDirection(BarDirection::None);
+  rightBar->restrictDirection(BarDirection::None);
+  rightBar->setPosition(cocos2d::Vec2(playSize.width - rightBar->getContentSize().width / 2 - 60, playSize.height / 2));
+
+  if (_ball) {
+    _ball->removeFromParentAndCleanup(true);
+  }
+
+  _ball = this->createBall("ball.png");
+  _ball->setTag(ObjectTag::BallTag);
+  _ball->setSpeed(0.0);
+  _ball->setDirection(cocos2d::Vec2::ZERO);
+  _ball->setPosition(cocos2d::Vec2(playSize.width / 2, playSize.height / 2));
+  arena->addChild(_ball);
+
+  _countdownTime = COUNTDOWN_START_TIME;
   this->setCountdownText((int)std::ceilf(_countdownTime));
 
   _countdownText->runAction(cocos2d::FadeIn::create(0.0f));
@@ -207,13 +230,15 @@ void GameplayLayer::prepareGame()
 
 void GameplayLayer::startGame()
 {
+  cocos2d::Vec2 ballDirection = cocos2d::Vec2(cocos2d::RandomHelper::random_real<float>(-100.0, 100.0), cocos2d::RandomHelper::random_real<float>(-100.0, 100.0));
+  ballDirection.normalize();
+
   _bars.at(PlayerSide::LeftPlayer)->setSpeed(SPEED);
   _bars.at(PlayerSide::RightPlayer)->setSpeed(SPEED);
 
+  cocos2d::PhysicsBody * boundingCircle = this->createBallBounding(15.0);
+  _ball->setPhysicsBody(boundingCircle);
   _ball->setSpeed(1.5 * SPEED);
-
-  cocos2d::Vec2 ballDirection = cocos2d::Vec2(cocos2d::RandomHelper::random_real<float>(-100.0, 100.0), cocos2d::RandomHelper::random_real<float>(-100.0, 100.0));
-  ballDirection.normalize();
   _ball->setDirection(ballDirection);
 
   _disableInput = false;
@@ -243,6 +268,13 @@ void GameplayLayer::setCountdownText(int time)
   ss << time;
 
   _countdownText->setString(ss.str());
+}
+
+void GameplayLayer::scoreGoal(PlayerSide side)
+{
+  int score = _gameManager->getPlayerScore(side) + 1;
+  _gameManager->setPlayerScore(side, score);
+  this->prepareGame();
 }
 
 void GameplayLayer::onEnter()
@@ -308,6 +340,12 @@ void GameplayLayer::onContactPostSolve(cocos2d::PhysicsContact & contact)
   auto shapeA = contact.getShapeA();
   auto shapeB = contact.getShapeB();
 
+  if ((shapeA->getCategoryBitmask() | shapeB->getCategoryBitmask()) == (PhysicsCategory::BallBitmask | PhysicsCategory::LeftGoalBitmask)) {
+    this->scoreGoal(PlayerSide::RightPlayer);
+  }
+  else if ((shapeA->getCategoryBitmask() | shapeB->getCategoryBitmask()) == (PhysicsCategory::BallBitmask | PhysicsCategory::RightGoalBitmask)) {
+    this->scoreGoal(PlayerSide::LeftPlayer);
+  }
 }
 
 void GameplayLayer::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event * event)

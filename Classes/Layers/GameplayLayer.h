@@ -29,7 +29,8 @@ private:
 
   void constructArena();
   BarObject * createBar(const std::string & filename, const cocos2d::Size & barSize);
-  BallObject * createBall(const std::string & filename, float radius);
+  BallObject * createBall(const std::string & filename);
+  cocos2d::PhysicsBody * createBallBounding(float radius);
   cocos2d::Node * createGoal(float length, int type);
   cocos2d::ui::Widget * createInvisibleButton(const cocos2d::Size & contentSize, const std::function<void(cocos2d::Ref *, cocos2d::ui::Widget::TouchEventType eventType)> & callback);
 
@@ -39,6 +40,7 @@ private:
   void restrictPreviousBarDirection(BarObject * bar);
   void countdownUpdate(float dt);
   void setCountdownText(int time);
+  void scoreGoal(PlayerSide side);
 
   void onEnter() override;
   void update(float dt) override;
