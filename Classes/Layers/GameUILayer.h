@@ -27,6 +27,8 @@ protected:
   bool init() override;
   void onEnterTransitionDidFinish() override;
   void updateTimer(float dt);
+
+  void listenRedButtonTouch(cocos2d::Ref * sender, cocos2d::ui::Widget::TouchEventType eventType);
 };
 
 #endif

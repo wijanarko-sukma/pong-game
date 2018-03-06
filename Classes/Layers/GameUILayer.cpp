@@ -57,6 +57,20 @@ void GameUILayer::constructMenu()
   _timerText->enableOutline(cocos2d::Color4B(255, 255, 255, 255), 4);
   _timerText->setPosition(cocos2d::Vec2(visibleOrigin.x + visibleSize.width * 0.5f, visibleOrigin.y + visibleSize.height * 0.9f));
   this->addChild(_timerText);
+
+  cocos2d::ui::Button * redButton = cocos2d::ui::Button::create("button_red.png");
+  redButton->setScale9Enabled(true);
+  redButton->setTouchEnabled(true);
+  redButton->setContentSize(cocos2d::Size(220, 60));
+  redButton->addTouchEventListener(CC_CALLBACK_2(GameUILayer::listenRedButtonTouch, this));
+  redButton->setPosition(cocos2d::Vec2(visibleOrigin.x + visibleSize.width * 0.5f, visibleOrigin.y + visibleSize.height * 0.9f - redButton->getContentSize().height * 0.5f - 60));
+  this->addChild(redButton);
+
+  cocos2d::ui::Text * exitText = cocos2d::ui::Text::create("MAIN MENU", "fonts/divlit.ttf", 44);
+  exitText->setTextColor(cocos2d::Color4B(255, 255, 255, 255));
+  exitText->enableOutline(cocos2d::Color4B(0, 0, 0, 255), 4);
+  exitText->setPosition(cocos2d::Vec2(redButton->getContentSize().width / 2, redButton->getContentSize().height / 2));
+  redButton->addChild(exitText);
 }
 
 void GameUILayer::setTimerText(int time)
@@ -77,4 +91,16 @@ void GameUILayer::onEnterTransitionDidFinish()
 void GameUILayer::updateTimer(float dt)
 {
   this->setTimerText((int)std::ceilf(_gameManager->getTimer()));
+}
+
+void GameUILayer::listenRedButtonTouch(cocos2d::Ref * sender, cocos2d::ui::Widget::TouchEventType eventType)
+{
+  switch (eventType)
+  {
+  case cocos2d::ui::Widget::TouchEventType::ENDED: {
+    cocos2d::Director::getInstance()->popScene();
+  }
+  default:
+    break;
+  }
 }
